@@ -1,0 +1,1144 @@
+{
+  "aggregate": {
+    "provider": "mock",
+    "n_cases": 16,
+    "overall_pass_rate": 0.9375,
+    "tool_choice_avg": 1.0,
+    "answer_match_avg": 0.9375,
+    "faithfulness_avg": 1.0,
+    "faithfulness_method": "heuristic-grounding",
+    "avg_latency_seconds": 0.0007,
+    "total_tool_calls": 19,
+    "honest_failures": [
+      "avg_order_value"
+    ]
+  },
+  "results": [
+    {
+      "trace": {
+        "case_id": "total_revenue_january",
+        "question": "What was our total revenue in January 2025?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT ROUND(SUM(quantity*unit_price),2) AS rev FROM order_items oi JOIN orders o ON o.id=oi.order_id WHERE o.order_date LIKE '2025-01%'"
+            },
+            "observation": [
+              {
+                "rev": 3069.68
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "Total revenue in January 2025 was $3069.68."
+          }
+        ],
+        "final_answer": "Total revenue in January 2025 was $3069.68.",
+        "elapsed_seconds": 0.0022,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "total_revenue_january",
+        "question": "What was our total revenue in January 2025?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 3069.68,
+          "candidates": [
+            2025.0,
+            3069.68
+          ],
+          "tolerance": 0.02
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            2025.0,
+            3069.68
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "total_revenue_all",
+        "question": "What is our total revenue across all orders?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT ROUND(SUM(quantity*unit_price),2) AS rev FROM order_items"
+            },
+            "observation": [
+              {
+                "rev": 13053.42
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "Total revenue across all orders is $13053.42."
+          }
+        ],
+        "final_answer": "Total revenue across all orders is $13053.42.",
+        "elapsed_seconds": 0.0009,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "total_revenue_all",
+        "question": "What is our total revenue across all orders?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 13053.42,
+          "candidates": [
+            13053.42
+          ],
+          "tolerance": 0.02
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            13053.42
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "avg_order_value",
+        "question": "What is the average order value?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT ROUND(AVG(unit_price),2) AS avg_val FROM order_items"
+            },
+            "observation": [
+              {
+                "avg_val": 82.23
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "The average order value is $82.23."
+          }
+        ],
+        "final_answer": "The average order value is $82.23.",
+        "elapsed_seconds": 0.0005,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "avg_order_value",
+        "question": "What is the average order value?",
+        "is_honest_failure": true,
+        "failure_note": "Agent computes average unit price per line item instead of average per-order total \u2014 grounded in its own query, but the wrong metric.",
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 0.0,
+          "gold": 217.56,
+          "candidates": [
+            82.23
+          ],
+          "tolerance": 0.02
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            82.23
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": false
+      }
+    },
+    {
+      "trace": {
+        "case_id": "top_category_by_revenue",
+        "question": "Which product category generated the most revenue?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT p.category, ROUND(SUM(oi.quantity*oi.unit_price),2) AS rev FROM order_items oi JOIN products p ON p.id=oi.product_id GROUP BY p.category ORDER BY rev DESC LIMIT 1"
+            },
+            "observation": [
+              {
+                "category": "Electronics",
+                "rev": 7679.28
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "The top category by revenue is Electronics, with $7679.28."
+          }
+        ],
+        "final_answer": "The top category by revenue is Electronics, with $7679.28.",
+        "elapsed_seconds": 0.0007,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "top_category_by_revenue",
+        "question": "Which product category generated the most revenue?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": "Electronics",
+          "final_answer": "The top category by revenue is Electronics, with $7679.28."
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            7679.28
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "top_product_by_units",
+        "question": "Which product sold the most units?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT p.name, SUM(oi.quantity) AS qty FROM order_items oi JOIN products p ON p.id=oi.product_id GROUP BY p.name ORDER BY qty DESC LIMIT 1"
+            },
+            "observation": [
+              {
+                "name": "Bluetooth Speaker",
+                "qty": 28
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "Bluetooth Speaker sold the most units, with 28 units sold."
+          }
+        ],
+        "final_answer": "Bluetooth Speaker sold the most units, with 28 units sold.",
+        "elapsed_seconds": 0.0007,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "top_product_by_units",
+        "question": "Which product sold the most units?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": "Bluetooth Speaker",
+          "final_answer": "Bluetooth Speaker sold the most units, with 28 units sold."
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            28.0
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "orders_count_february",
+        "question": "How many orders were placed in February 2025?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT COUNT(*) AS n FROM orders WHERE order_date LIKE '2025-02%'"
+            },
+            "observation": [
+              {
+                "n": 15
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "15 orders were placed in February 2025."
+          }
+        ],
+        "final_answer": "15 orders were placed in February 2025.",
+        "elapsed_seconds": 0.0005,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "orders_count_february",
+        "question": "How many orders were placed in February 2025?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 15,
+          "candidates": [
+            15.0,
+            2025.0
+          ],
+          "tolerance": 0
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            15.0,
+            2025.0
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "total_returns_count",
+        "question": "How many items have been returned in total?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT COUNT(*) AS n FROM returns"
+            },
+            "observation": [
+              {
+                "n": 13
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "A total of 13 items have been returned."
+          }
+        ],
+        "final_answer": "A total of 13 items have been returned.",
+        "elapsed_seconds": 0.0005,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "total_returns_count",
+        "question": "How many items have been returned in total?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 13,
+          "candidates": [
+            13.0
+          ],
+          "tolerance": 0
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            13.0
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "most_common_return_reason",
+        "question": "What is the most common reason customers return items?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT reason, COUNT(*) AS n FROM returns GROUP BY reason ORDER BY n DESC LIMIT 1"
+            },
+            "observation": [
+              {
+                "reason": "not_as_described",
+                "n": 5
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "The most common return reason is 'not_as_described', accounting for 5 returns."
+          }
+        ],
+        "final_answer": "The most common return reason is 'not_as_described', accounting for 5 returns.",
+        "elapsed_seconds": 0.0006,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "most_common_return_reason",
+        "question": "What is the most common reason customers return items?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": "not_as_described",
+          "final_answer": "The most common return reason is 'not_as_described', accounting for 5 returns."
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            5.0
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "return_rate_electronics",
+        "question": "What percentage of Electronics line items get returned?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT (SELECT COUNT(*) FROM returns r JOIN order_items oi ON oi.id=r.order_item_id JOIN products p ON p.id=oi.product_id WHERE p.category='Electronics') AS returned, (SELECT COUNT(*) FROM order_items oi JOIN products p ON p.id=oi.product_id WHERE p.category='Electronics') AS total"
+            },
+            "observation": [
+              {
+                "returned": 3,
+                "total": 38
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "tool",
+            "id": "tool_1",
+            "tool": "calculator",
+            "args": {
+              "expression": "3 / 38 * 100"
+            },
+            "observation": {
+              "expression": "3 / 38 * 100",
+              "result": 7.894736842105263
+            },
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "Approximately 7.89% of Electronics line items get returned."
+          }
+        ],
+        "final_answer": "Approximately 7.89% of Electronics line items get returned.",
+        "elapsed_seconds": 0.0007,
+        "tool_calls": [
+          "sql_query",
+          "calculator"
+        ]
+      },
+      "score": {
+        "case_id": "return_rate_electronics",
+        "question": "What percentage of Electronics line items get returned?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "calculator",
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query",
+            "calculator"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 7.89,
+          "candidates": [
+            7.89
+          ],
+          "tolerance": 0.05
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            7.89
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "monthly_revenue_trend",
+        "question": "Show me the monthly revenue trend for 2025 and tell me which month had the highest revenue.",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT substr(o.order_date,1,7) AS month, ROUND(SUM(oi.quantity*oi.unit_price),2) AS rev FROM order_items oi JOIN orders o ON o.id=oi.order_id GROUP BY month ORDER BY month"
+            },
+            "observation": [
+              {
+                "month": "2025-01",
+                "rev": 3069.68
+              },
+              {
+                "month": "2025-02",
+                "rev": 4559.45
+              },
+              {
+                "month": "2025-03",
+                "rev": 2104.72
+              },
+              {
+                "month": "2025-04",
+                "rev": 3319.57
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "tool",
+            "id": "tool_1",
+            "tool": "chart",
+            "args": {
+              "kind": "bar",
+              "x": [
+                "2025-01",
+                "2025-02",
+                "2025-03",
+                "2025-04"
+              ],
+              "y": [
+                3069.68,
+                4559.45,
+                2104.72,
+                3319.57
+              ],
+              "title": "Monthly Revenue, 2025"
+            },
+            "observation": {
+              "kind": "bar",
+              "x": [
+                "2025-01",
+                "2025-02",
+                "2025-03",
+                "2025-04"
+              ],
+              "y": [
+                3069.68,
+                4559.45,
+                2104.72,
+                3319.57
+              ],
+              "title": "Monthly Revenue, 2025",
+              "rendered": true
+            },
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "Monthly revenue is charted above. 2025-02 had the highest revenue, at $4559.45."
+          }
+        ],
+        "final_answer": "Monthly revenue is charted above. 2025-02 had the highest revenue, at $4559.45.",
+        "elapsed_seconds": 0.0006,
+        "tool_calls": [
+          "sql_query",
+          "chart"
+        ]
+      },
+      "score": {
+        "case_id": "monthly_revenue_trend",
+        "question": "Show me the monthly revenue trend for 2025 and tell me which month had the highest revenue.",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "chart",
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query",
+            "chart"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": "2025-02",
+          "final_answer": "Monthly revenue is charted above. 2025-02 had the highest revenue, at $4559.45."
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            4559.45
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "revenue_growth_jan_feb",
+        "question": "What was the percentage revenue growth from January to February 2025?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT ROUND(SUM(CASE WHEN o.order_date LIKE '2025-01%' THEN oi.quantity*oi.unit_price ELSE 0 END),2) AS jan_rev, ROUND(SUM(CASE WHEN o.order_date LIKE '2025-02%' THEN oi.quantity*oi.unit_price ELSE 0 END),2) AS feb_rev FROM order_items oi JOIN orders o ON o.id=oi.order_id"
+            },
+            "observation": [
+              {
+                "jan_rev": 3069.68,
+                "feb_rev": 4559.45
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "tool",
+            "id": "tool_1",
+            "tool": "calculator",
+            "args": {
+              "expression": "(4559.45 - 3069.68) / 3069.68 * 100"
+            },
+            "observation": {
+              "expression": "(4559.45 - 3069.68) / 3069.68 * 100",
+              "result": 48.53176878371687
+            },
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "Revenue grew 48.53% from January ($3069.68) to February ($4559.45)."
+          }
+        ],
+        "final_answer": "Revenue grew 48.53% from January ($3069.68) to February ($4559.45).",
+        "elapsed_seconds": 0.0006,
+        "tool_calls": [
+          "sql_query",
+          "calculator"
+        ]
+      },
+      "score": {
+        "case_id": "revenue_growth_jan_feb",
+        "question": "What was the percentage revenue growth from January to February 2025?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "calculator",
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query",
+            "calculator"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 48.53,
+          "candidates": [
+            48.53,
+            3069.68,
+            4559.45
+          ],
+          "tolerance": 0.05
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            48.53,
+            3069.68,
+            4559.45
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "net_revenue_after_returns",
+        "question": "What is our net revenue after accounting for returns?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT ROUND((SELECT SUM(quantity*unit_price) FROM order_items) - (SELECT COALESCE(SUM(oi.quantity*oi.unit_price),0) FROM returns r JOIN order_items oi ON oi.id=r.order_item_id),2) AS net"
+            },
+            "observation": [
+              {
+                "net": 11948.63
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "Net revenue after returns is $11948.63."
+          }
+        ],
+        "final_answer": "Net revenue after returns is $11948.63.",
+        "elapsed_seconds": 0.0006,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "net_revenue_after_returns",
+        "question": "What is our net revenue after accounting for returns?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 11948.63,
+          "candidates": [
+            11948.63
+          ],
+          "tolerance": 0.02
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            11948.63
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "top_customer_by_spend",
+        "question": "Who is our highest-spending customer?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT cu.name, ROUND(SUM(oi.quantity*oi.unit_price),2) AS total FROM order_items oi JOIN orders o ON o.id=oi.order_id JOIN customers cu ON cu.id=o.customer_id GROUP BY cu.name ORDER BY total DESC LIMIT 1"
+            },
+            "observation": [
+              {
+                "name": "Kira Volkov",
+                "total": 2034.8
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "Kira Volkov is our highest-spending customer, at $2034.80."
+          }
+        ],
+        "final_answer": "Kira Volkov is our highest-spending customer, at $2034.80.",
+        "elapsed_seconds": 0.0007,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "top_customer_by_spend",
+        "question": "Who is our highest-spending customer?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": "Kira Volkov",
+          "final_answer": "Kira Volkov is our highest-spending customer, at $2034.80."
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            2034.8
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "unique_customers_apparel",
+        "question": "How many unique customers have purchased Apparel?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT COUNT(DISTINCT o.customer_id) AS n FROM order_items oi JOIN orders o ON o.id=oi.order_id JOIN products p ON p.id=oi.product_id WHERE p.category='Apparel'"
+            },
+            "observation": [
+              {
+                "n": 10
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "10 unique customers have purchased Apparel."
+          }
+        ],
+        "final_answer": "10 unique customers have purchased Apparel.",
+        "elapsed_seconds": 0.0007,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "unique_customers_apparel",
+        "question": "How many unique customers have purchased Apparel?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 10,
+          "candidates": [
+            10.0
+          ],
+          "tolerance": 0
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            10.0
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "avg_unit_price_electronics_products",
+        "question": "What is the average unit price of products in the Electronics category?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT ROUND(AVG(unit_price),2) AS a FROM products WHERE category='Electronics'"
+            },
+            "observation": [
+              {
+                "a": 116.66
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "The average unit price of Electronics products is $116.66."
+          }
+        ],
+        "final_answer": "The average unit price of Electronics products is $116.66.",
+        "elapsed_seconds": 0.0005,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "avg_unit_price_electronics_products",
+        "question": "What is the average unit price of products in the Electronics category?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 116.66,
+          "candidates": [
+            116.66
+          ],
+          "tolerance": 0.02
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            116.66
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "revenue_apparel",
+        "question": "How much revenue did Apparel generate?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "sql_query",
+            "args": {
+              "query": "SELECT ROUND(SUM(oi.quantity*oi.unit_price),2) AS rev FROM order_items oi JOIN products p ON p.id=oi.product_id WHERE p.category='Apparel'"
+            },
+            "observation": [
+              {
+                "rev": 1799.76
+              }
+            ],
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "Apparel generated $1799.76 in revenue."
+          }
+        ],
+        "final_answer": "Apparel generated $1799.76 in revenue.",
+        "elapsed_seconds": 0.0006,
+        "tool_calls": [
+          "sql_query"
+        ]
+      },
+      "score": {
+        "case_id": "revenue_apparel",
+        "question": "How much revenue did Apparel generate?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "sql_query"
+          ],
+          "actual": [
+            "sql_query"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": 1799.76,
+          "candidates": [
+            1799.76
+          ],
+          "tolerance": 0.02
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [
+            1799.76
+          ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    }
+  ]
+}
