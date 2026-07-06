@@ -53,11 +53,32 @@ class MockProvider:
         return {"type": "final", "answer": step["fn"](observations)}
 
 
+def _load_dotenv_key():
+    """Falls back to a local, gitignored .env file (KEY=VALUE lines) if
+    ANTHROPIC_API_KEY isn't already in the environment — lets the key live
+    only in an untracked file on disk, never typed into a shell command."""
+    import os
+    from pathlib import Path
+
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return os.environ["ANTHROPIC_API_KEY"]
+
+    env_path = Path(__file__).resolve().parents[2] / ".env"
+    if not env_path.exists():
+        return None
+    for line in env_path.read_text().splitlines():
+        line = line.strip()
+        if line.startswith("ANTHROPIC_API_KEY="):
+            return line.split("=", 1)[1].strip().strip('"').strip("'")
+    return None
+
+
 class AnthropicProvider:
     def __init__(self, model="claude-sonnet-5", client=None):
         if client is None:
             import anthropic
-            client = anthropic.Anthropic()
+            api_key = _load_dotenv_key()
+            client = anthropic.Anthropic(api_key=api_key) if api_key else anthropic.Anthropic()
         self.client = client
         self.model = model
 
