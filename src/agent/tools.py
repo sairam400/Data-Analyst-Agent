@@ -156,12 +156,12 @@ TOOL_SPECS = [
     {
         "name": "get_schema",
         "description": "Get the database schema (tables and columns) before writing SQL.",
-        "input_schema": {"type": "object", "properties": {}},
+        "parameters": {"type": "object", "properties": {}},
     },
     {
         "name": "run_sql",
         "description": "Run a read-only SELECT query against the business SQLite database.",
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {"query": {"type": "string", "description": "A single SELECT statement"}},
             "required": ["query"],
@@ -171,7 +171,7 @@ TOOL_SPECS = [
         "name": "run_python",
         "description": "Run a Python snippet for stats or transforms beyond what SQL can express. "
                         "Print results to stdout to see them. No network access.",
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {"code": {"type": "string", "description": "Python source code to execute"}},
             "required": ["code"],
@@ -180,7 +180,7 @@ TOOL_SPECS = [
     {
         "name": "make_chart",
         "description": "Render a bar or line chart server-side and return it as an image.",
-        "input_schema": {
+        "parameters": {
             "type": "object",
             "properties": {
                 "kind": {"type": "string", "enum": ["bar", "line"]},
