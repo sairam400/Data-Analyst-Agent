@@ -20,6 +20,11 @@ import re
 
 NUMBER_PATTERN = re.compile(r"-?\d[\d,]*\.?\d*")
 ISO_DATE_PATTERN = re.compile(r"\b\d{4}-\d{2}(?:-\d{2})?\b")
+UNANSWERABLE_PATTERN = re.compile(
+    r"\b(can'?t|cannot|no such|not available|doesn'?t (?:have|include)|"
+    r"isn'?t (?:tracked|available)|unable to (?:answer|determine)|not (?:tracked|possible))\b",
+    re.IGNORECASE,
+)
 
 
 def _numbers_in_text(text):
@@ -40,6 +45,9 @@ def _bucket(value, numbers, strings):
         numbers.add(round(float(value), 2))
     elif isinstance(value, str):
         strings.add(value.lower())
+        # run_python's observation is raw stdout text, not structured fields —
+        # any numbers it printed are still a real grounding source.
+        numbers.update(_numbers_in_text(value))
     elif isinstance(value, list):
         for item in value:
             _bucket(item, numbers, strings)
@@ -72,6 +80,11 @@ def score_tool_choice(case, trace):
 def score_answer_match(case, trace):
     final_answer = trace["final_answer"]
     gold = case["gold_answer"]
+
+    if case["answer_type"] == "unanswerable":
+        passed = bool(UNANSWERABLE_PATTERN.search(final_answer))
+        return {"method": "deterministic", "score": 1.0 if passed else 0.0,
+                "gold": "should decline to answer", "final_answer": final_answer}
 
     if case["answer_type"] == "numeric":
         tolerance = case.get("tolerance", 0.01)

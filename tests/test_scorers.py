@@ -40,6 +40,19 @@ class TestAnswerMatch(unittest.TestCase):
         self.assertEqual(score_answer_match(CASE_STRING, trace)["score"], 1.0)
 
 
+class TestUnanswerable(unittest.TestCase):
+    CASE = {"answer_type": "unanswerable", "gold_answer": None,
+            "expected_tools": {"get_schema"}, "question": "What is the customer's email?"}
+
+    def test_honest_decline_passes(self):
+        trace = trace_with("I can't answer that — there's no email column in this schema.")
+        self.assertEqual(score_answer_match(self.CASE, trace)["score"], 1.0)
+
+    def test_fabricated_answer_fails(self):
+        trace = trace_with("Their email is alice@example.com.")
+        self.assertEqual(score_answer_match(self.CASE, trace)["score"], 0.0)
+
+
 class TestFaithfulness(unittest.TestCase):
     def test_grounded_number_passes(self):
         trace = trace_with("Revenue was $100.00.")

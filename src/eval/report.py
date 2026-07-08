@@ -8,13 +8,13 @@ from html import escape as esc
 CSS = """
 :root {
   --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --ink-muted: #898781;
-  --grid: #e1e0d9; --baseline: #c3c2b7; --border: rgba(11,11,11,0.10);
+  --grid: #e1e0d9; --border: rgba(11,11,11,0.10);
   --series-1: #2a78d6; --good: #0ca30c; --critical: #d03b3b; --warning: #eda100;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --ink-muted: #898781;
-    --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+    --grid: #2c2c2a; --border: rgba(255,255,255,0.10);
     --series-1: #3987e5; --good: #0ca30c; --critical: #e66767; --warning: #c98500;
   }
 }
@@ -73,11 +73,7 @@ h1 { font-size: 1.5rem; margin: 0 0 4px; }
 .observation { font-family: ui-monospace, monospace; font-size: 0.74rem; color: var(--ink-muted);
   white-space: pre-wrap; word-break: break-word; }
 .final-answer { font-size: 0.9rem; }
-.chart-svg { width: 100%; height: auto; margin: 4px 0 16px; }
-.bar { fill: var(--series-1); }
-.baseline { stroke: var(--baseline); stroke-width: 1; }
-.axis-label { fill: var(--ink-muted); font-size: 10px; }
-.value-label { fill: var(--ink-2); font-size: 10px; font-variant-numeric: tabular-nums; }
+.chart-image { max-width: 100%; height: auto; margin: 4px 0 16px; border-radius: 6px; }
 footer { color: var(--ink-muted); font-size: 0.78rem; margin-top: 28px; }
 """
 
@@ -88,46 +84,27 @@ def render_stat_tile(label, value, sublabel=""):
             f'<div class="tile-sub">{esc(sublabel)}</div></div>')
 
 
-def render_bar_chart(x, y, title):
-    width, height = 640, 220
-    pad_left, pad_bottom, pad_top, pad_right = 12, 30, 24, 16
-    plot_w = width - pad_left - pad_right
-    plot_h = height - pad_bottom - pad_top
-    max_y = max(y) * 1.15 if y else 1
-    n = len(x) or 1
-    bar_gap = 14
-    bar_w = (plot_w - bar_gap * (n - 1)) / n
-
-    bars, labels = [], []
-    for i, (xi, yi) in enumerate(zip(x, y)):
-        bar_h = (yi / max_y) * plot_h if max_y else 0
-        bx = pad_left + i * (bar_w + bar_gap)
-        by = pad_top + (plot_h - bar_h)
-        bars.append(f'<rect x="{bx:.1f}" y="{by:.1f}" width="{bar_w:.1f}" height="{bar_h:.1f}" rx="4" class="bar">'
-                     f'<title>{esc(xi)}: {yi:,.2f}</title></rect>')
-        labels.append(f'<text x="{bx + bar_w / 2:.1f}" y="{height - pad_bottom + 16}" class="axis-label" '
-                       f'text-anchor="middle">{esc(xi)}</text>')
-        labels.append(f'<text x="{bx + bar_w / 2:.1f}" y="{by - 6:.1f}" class="value-label" '
-                       f'text-anchor="middle">{yi:,.0f}</text>')
-
-    baseline_y = pad_top + plot_h
-    return (f'<svg viewBox="0 0 {width} {height}" class="chart-svg" role="img" aria-label="{esc(title)}">'
-            f'<line x1="{pad_left}" y1="{baseline_y}" x2="{width - pad_right}" y2="{baseline_y}" class="baseline" />'
-            f'{"".join(bars)}{"".join(labels)}</svg>')
-
-
 def render_trace(trace):
     parts = []
     for i, step in enumerate(trace["steps"], start=1):
         if step["type"] == "tool":
             args = step["args"]
-            body = (f'<pre class="sql">{esc(args["query"])}</pre>' if "query" in args
-                    else f'<pre class="sql">{esc(json.dumps(args))}</pre>')
-            obs_text = json.dumps(step["observation"]) if step["observation"] is not None else (step.get("error") or "")
+            if "query" in args:
+                body = f'<pre class="sql">{esc(args["query"])}</pre>'
+            elif "code" in args:
+                body = f'<pre class="sql">{esc(args["code"])}</pre>'
+            else:
+                body = f'<pre class="sql">{esc(json.dumps(args))}</pre>'
+            if step["tool"] == "make_chart" and step["observation"] and step["observation"].get("image_base64"):
+                title = esc(step["observation"].get("title", "chart"))
+                obs_html = f'<img class="chart-image" src="data:image/png;base64,{step["observation"]["image_base64"]}" alt="{title}">'
+            else:
+                obs_text = json.dumps(step["observation"]) if step["observation"] is not None else (step.get("error") or "")
+                obs_html = f'<div class="observation">{esc(obs_text)}</div>'
             parts.append(
                 f'<div class="step"><div class="step-num">{i}</div><div class="step-body">'
                 f'<span class="tool-chip">{esc(step["tool"])}</span>{body}'
-                f'<div class="observation">{esc(obs_text)}</div></div></div>'
+                f'{obs_html}</div></div>'
             )
         else:
             parts.append(
@@ -155,19 +132,13 @@ def render_case(entry):
 
     note = f'<div class="failure-note">{esc(score["failure_note"])}</div>' if score.get("failure_note") else ""
 
-    chart_html = ""
-    for step in trace["steps"]:
-        if step["type"] == "tool" and step["tool"] == "chart":
-            obs = step["observation"]
-            chart_html = render_bar_chart(obs["x"], obs["y"], obs["title"])
-
     return (
         f'<details class="case-card {status_class}"><summary>'
         f'<span class="status-dot"></span>'
         f'<span class="case-id">{esc(score["case_id"])}</span>'
         f'<span class="case-question">{esc(score["question"])}</span>'
         f'<span class="status-label">{status_label}</span>{badges}'
-        f'</summary><div class="case-detail">{note}{chart_html}'
+        f'</summary><div class="case-detail">{note}'
         f'<div class="trace-rail">{render_trace(trace)}</div></div></details>'
     )
 
@@ -181,7 +152,8 @@ def generate_report(results, aggregate, report_path):
         render_stat_tile("Faithfulness", f'{aggregate["faithfulness_avg"] * 100:.0f}%',
                           aggregate["faithfulness_method"]),
         render_stat_tile("Avg latency", f'{aggregate["avg_latency_seconds"] * 1000:.1f} ms'),
-        render_stat_tile("Tool calls", str(aggregate["total_tool_calls"])),
+        render_stat_tile("Avg tool calls", f'{aggregate["avg_tool_calls"]:.2f}'),
+        render_stat_tile("Avg retries", f'{aggregate["avg_retries"]:.2f}'),
     ])
 
     honest_banner = ""

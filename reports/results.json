@@ -1,14 +1,16 @@
 {
   "aggregate": {
     "provider": "mock",
-    "n_cases": 16,
-    "overall_pass_rate": 0.9375,
+    "n_cases": 15,
+    "overall_pass_rate": 0.9333,
     "tool_choice_avg": 1.0,
-    "answer_match_avg": 0.9375,
+    "answer_match_avg": 0.9333,
     "faithfulness_avg": 1.0,
     "faithfulness_method": "heuristic-grounding",
-    "avg_latency_seconds": 0.0007,
-    "total_tool_calls": 19,
+    "avg_latency_seconds": 0.0448,
+    "avg_tool_calls": 1.1333,
+    "avg_retries": 0,
+    "total_tool_calls": 17,
     "honest_failures": [
       "avg_order_value"
     ]
@@ -16,100 +18,34 @@
   "results": [
     {
       "trace": {
-        "case_id": "total_revenue_january",
-        "question": "What was our total revenue in January 2025?",
-        "steps": [
-          {
-            "type": "tool",
-            "id": "tool_0",
-            "tool": "sql_query",
-            "args": {
-              "query": "SELECT ROUND(SUM(quantity*unit_price),2) AS rev FROM order_items oi JOIN orders o ON o.id=oi.order_id WHERE o.order_date LIKE '2025-01%'"
-            },
-            "observation": [
-              {
-                "rev": 3069.68
-              }
-            ],
-            "error": null
-          },
-          {
-            "type": "final",
-            "answer": "Total revenue in January 2025 was $3069.68."
-          }
-        ],
-        "final_answer": "Total revenue in January 2025 was $3069.68.",
-        "elapsed_seconds": 0.0022,
-        "tool_calls": [
-          "sql_query"
-        ]
-      },
-      "score": {
-        "case_id": "total_revenue_january",
-        "question": "What was our total revenue in January 2025?",
-        "is_honest_failure": false,
-        "failure_note": null,
-        "tool_choice": {
-          "method": "deterministic",
-          "score": 1.0,
-          "expected": [
-            "sql_query"
-          ],
-          "actual": [
-            "sql_query"
-          ]
-        },
-        "answer_match": {
-          "method": "deterministic",
-          "score": 1.0,
-          "gold": 3069.68,
-          "candidates": [
-            2025.0,
-            3069.68
-          ],
-          "tolerance": 0.02
-        },
-        "faithfulness": {
-          "method": "heuristic-grounding",
-          "score": 1.0,
-          "answer_numbers": [
-            2025.0,
-            3069.68
-          ],
-          "ungrounded": []
-        },
-        "overall_pass": true
-      }
-    },
-    {
-      "trace": {
         "case_id": "total_revenue_all",
         "question": "What is our total revenue across all orders?",
         "steps": [
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT ROUND(SUM(quantity*unit_price),2) AS rev FROM order_items"
             },
             "observation": [
               {
-                "rev": 13053.42
+                "rev": 626849.61
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "Total revenue across all orders is $13053.42."
+            "answer": "Total revenue across all orders is $626849.61."
           }
         ],
-        "final_answer": "Total revenue across all orders is $13053.42.",
-        "elapsed_seconds": 0.0009,
+        "final_answer": "Total revenue across all orders is $626849.61.",
+        "elapsed_seconds": 0.0041,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "total_revenue_all",
@@ -120,18 +56,18 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": 13053.42,
+          "gold": 626849.61,
           "candidates": [
-            13053.42
+            626849.61
           ],
           "tolerance": 0.02
         },
@@ -139,7 +75,7 @@
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            13053.42
+            626849.61
           ],
           "ungrounded": []
         },
@@ -154,27 +90,28 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT ROUND(AVG(unit_price),2) AS avg_val FROM order_items"
             },
             "observation": [
               {
-                "avg_val": 82.23
+                "avg_val": 77.22
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "The average order value is $82.23."
+            "answer": "The average order value is $77.22."
           }
         ],
-        "final_answer": "The average order value is $82.23.",
-        "elapsed_seconds": 0.0005,
+        "final_answer": "The average order value is $77.22.",
+        "elapsed_seconds": 0.0036,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "avg_order_value",
@@ -185,18 +122,18 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 0.0,
-          "gold": 217.56,
+          "gold": 222.29,
           "candidates": [
-            82.23
+            77.22
           ],
           "tolerance": 0.02
         },
@@ -204,7 +141,7 @@
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            82.23
+            77.22
           ],
           "ungrounded": []
         },
@@ -219,28 +156,29 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT p.category, ROUND(SUM(oi.quantity*oi.unit_price),2) AS rev FROM order_items oi JOIN products p ON p.id=oi.product_id GROUP BY p.category ORDER BY rev DESC LIMIT 1"
             },
             "observation": [
               {
                 "category": "Electronics",
-                "rev": 7679.28
+                "rev": 218485.55
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "The top category by revenue is Electronics, with $7679.28."
+            "answer": "The top category by revenue is Electronics, with $218485.55."
           }
         ],
-        "final_answer": "The top category by revenue is Electronics, with $7679.28.",
-        "elapsed_seconds": 0.0007,
+        "final_answer": "The top category by revenue is Electronics, with $218485.55.",
+        "elapsed_seconds": 0.012,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "top_category_by_revenue",
@@ -251,23 +189,23 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
           "gold": "Electronics",
-          "final_answer": "The top category by revenue is Electronics, with $7679.28."
+          "final_answer": "The top category by revenue is Electronics, with $218485.55."
         },
         "faithfulness": {
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            7679.28
+            218485.55
           ],
           "ungrounded": []
         },
@@ -282,28 +220,29 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT p.name, SUM(oi.quantity) AS qty FROM order_items oi JOIN products p ON p.id=oi.product_id GROUP BY p.name ORDER BY qty DESC LIMIT 1"
             },
             "observation": [
               {
-                "name": "Bluetooth Speaker",
-                "qty": 28
+                "name": "Shampoo Set",
+                "qty": 371
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "Bluetooth Speaker sold the most units, with 28 units sold."
+            "answer": "Shampoo Set sold the most units, with 371 units sold."
           }
         ],
-        "final_answer": "Bluetooth Speaker sold the most units, with 28 units sold.",
-        "elapsed_seconds": 0.0007,
+        "final_answer": "Shampoo Set sold the most units, with 371 units sold.",
+        "elapsed_seconds": 0.0116,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "top_product_by_units",
@@ -314,90 +253,23 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": "Bluetooth Speaker",
-          "final_answer": "Bluetooth Speaker sold the most units, with 28 units sold."
+          "gold": "Shampoo Set",
+          "final_answer": "Shampoo Set sold the most units, with 371 units sold."
         },
         "faithfulness": {
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            28.0
-          ],
-          "ungrounded": []
-        },
-        "overall_pass": true
-      }
-    },
-    {
-      "trace": {
-        "case_id": "orders_count_february",
-        "question": "How many orders were placed in February 2025?",
-        "steps": [
-          {
-            "type": "tool",
-            "id": "tool_0",
-            "tool": "sql_query",
-            "args": {
-              "query": "SELECT COUNT(*) AS n FROM orders WHERE order_date LIKE '2025-02%'"
-            },
-            "observation": [
-              {
-                "n": 15
-              }
-            ],
-            "error": null
-          },
-          {
-            "type": "final",
-            "answer": "15 orders were placed in February 2025."
-          }
-        ],
-        "final_answer": "15 orders were placed in February 2025.",
-        "elapsed_seconds": 0.0005,
-        "tool_calls": [
-          "sql_query"
-        ]
-      },
-      "score": {
-        "case_id": "orders_count_february",
-        "question": "How many orders were placed in February 2025?",
-        "is_honest_failure": false,
-        "failure_note": null,
-        "tool_choice": {
-          "method": "deterministic",
-          "score": 1.0,
-          "expected": [
-            "sql_query"
-          ],
-          "actual": [
-            "sql_query"
-          ]
-        },
-        "answer_match": {
-          "method": "deterministic",
-          "score": 1.0,
-          "gold": 15,
-          "candidates": [
-            15.0,
-            2025.0
-          ],
-          "tolerance": 0
-        },
-        "faithfulness": {
-          "method": "heuristic-grounding",
-          "score": 1.0,
-          "answer_numbers": [
-            15.0,
-            2025.0
+            371.0
           ],
           "ungrounded": []
         },
@@ -412,27 +284,28 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT COUNT(*) AS n FROM returns"
             },
             "observation": [
               {
-                "n": 13
+                "n": 659
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "A total of 13 items have been returned."
+            "answer": "A total of 659 items have been returned."
           }
         ],
-        "final_answer": "A total of 13 items have been returned.",
-        "elapsed_seconds": 0.0005,
+        "final_answer": "A total of 659 items have been returned.",
+        "elapsed_seconds": 0.0025,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "total_returns_count",
@@ -443,18 +316,18 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": 13,
+          "gold": 659,
           "candidates": [
-            13.0
+            659.0
           ],
           "tolerance": 0
         },
@@ -462,7 +335,7 @@
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            13.0
+            659.0
           ],
           "ungrounded": []
         },
@@ -477,28 +350,29 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT reason, COUNT(*) AS n FROM returns GROUP BY reason ORDER BY n DESC LIMIT 1"
             },
             "observation": [
               {
-                "reason": "not_as_described",
-                "n": 5
+                "reason": "wrong_size",
+                "n": 142
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "The most common return reason is 'not_as_described', accounting for 5 returns."
+            "answer": "The most common return reason is 'wrong_size', accounting for 142 returns."
           }
         ],
-        "final_answer": "The most common return reason is 'not_as_described', accounting for 5 returns.",
-        "elapsed_seconds": 0.0006,
+        "final_answer": "The most common return reason is 'wrong_size', accounting for 142 returns.",
+        "elapsed_seconds": 0.0028,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "most_common_return_reason",
@@ -509,23 +383,23 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": "not_as_described",
-          "final_answer": "The most common return reason is 'not_as_described', accounting for 5 returns."
+          "gold": "wrong_size",
+          "final_answer": "The most common return reason is 'wrong_size', accounting for 142 returns."
         },
         "faithfulness": {
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            5.0
+            142.0
           ],
           "ungrounded": []
         },
@@ -540,14 +414,14 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT (SELECT COUNT(*) FROM returns r JOIN order_items oi ON oi.id=r.order_item_id JOIN products p ON p.id=oi.product_id WHERE p.category='Electronics') AS returned, (SELECT COUNT(*) FROM order_items oi JOIN products p ON p.id=oi.product_id WHERE p.category='Electronics') AS total"
             },
             "observation": [
               {
-                "returned": 3,
-                "total": 38
+                "returned": 150,
+                "total": 1218
               }
             ],
             "error": null
@@ -555,27 +429,27 @@
           {
             "type": "tool",
             "id": "tool_1",
-            "tool": "calculator",
+            "tool": "run_python",
             "args": {
-              "expression": "3 / 38 * 100"
+              "code": "print(round(150 / 1218 * 100, 2))"
             },
             "observation": {
-              "expression": "3 / 38 * 100",
-              "result": 7.894736842105263
+              "stdout": "12.32\n"
             },
             "error": null
           },
           {
             "type": "final",
-            "answer": "Approximately 7.89% of Electronics line items get returned."
+            "answer": "Approximately 12.32% of Electronics line items get returned."
           }
         ],
-        "final_answer": "Approximately 7.89% of Electronics line items get returned.",
-        "elapsed_seconds": 0.0007,
+        "final_answer": "Approximately 12.32% of Electronics line items get returned.",
+        "elapsed_seconds": 0.1595,
         "tool_calls": [
-          "sql_query",
-          "calculator"
-        ]
+          "run_sql",
+          "run_python"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "return_rate_electronics",
@@ -586,20 +460,20 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "calculator",
-            "sql_query"
+            "run_python",
+            "run_sql"
           ],
           "actual": [
-            "sql_query",
-            "calculator"
+            "run_sql",
+            "run_python"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": 7.89,
+          "gold": 12.32,
           "candidates": [
-            7.89
+            12.32
           ],
           "tolerance": 0.05
         },
@@ -607,7 +481,7 @@
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            7.89
+            12.32
           ],
           "ungrounded": []
         },
@@ -622,26 +496,58 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT substr(o.order_date,1,7) AS month, ROUND(SUM(oi.quantity*oi.unit_price),2) AS rev FROM order_items oi JOIN orders o ON o.id=oi.order_id GROUP BY month ORDER BY month"
             },
             "observation": [
               {
                 "month": "2025-01",
-                "rev": 3069.68
+                "rev": 50008.26
               },
               {
                 "month": "2025-02",
-                "rev": 4559.45
+                "rev": 51694.83
               },
               {
                 "month": "2025-03",
-                "rev": 2104.72
+                "rev": 48178.49
               },
               {
                 "month": "2025-04",
-                "rev": 3319.57
+                "rev": 54119.05
+              },
+              {
+                "month": "2025-05",
+                "rev": 51776.18
+              },
+              {
+                "month": "2025-06",
+                "rev": 56867.07
+              },
+              {
+                "month": "2025-07",
+                "rev": 45993.44
+              },
+              {
+                "month": "2025-08",
+                "rev": 57896.19
+              },
+              {
+                "month": "2025-09",
+                "rev": 51168.58
+              },
+              {
+                "month": "2025-10",
+                "rev": 58591.0
+              },
+              {
+                "month": "2025-11",
+                "rev": 49202.4
+              },
+              {
+                "month": "2025-12",
+                "rev": 51354.12
               }
             ],
             "error": null
@@ -649,53 +555,58 @@
           {
             "type": "tool",
             "id": "tool_1",
-            "tool": "chart",
+            "tool": "make_chart",
             "args": {
               "kind": "bar",
               "x": [
                 "2025-01",
                 "2025-02",
                 "2025-03",
-                "2025-04"
+                "2025-04",
+                "2025-05",
+                "2025-06",
+                "2025-07",
+                "2025-08",
+                "2025-09",
+                "2025-10",
+                "2025-11",
+                "2025-12"
               ],
               "y": [
-                3069.68,
-                4559.45,
-                2104.72,
-                3319.57
+                50008.26,
+                51694.83,
+                48178.49,
+                54119.05,
+                51776.18,
+                56867.07,
+                45993.44,
+                57896.19,
+                51168.58,
+                58591.0,
+                49202.4,
+                51354.12
               ],
               "title": "Monthly Revenue, 2025"
             },
             "observation": {
               "kind": "bar",
-              "x": [
-                "2025-01",
-                "2025-02",
-                "2025-03",
-                "2025-04"
-              ],
-              "y": [
-                3069.68,
-                4559.45,
-                2104.72,
-                3319.57
-              ],
               "title": "Monthly Revenue, 2025",
-              "rendered": true
+              "image_base64": "iVBORw0KGgoAAAANSUhEUgAAAoAAAAFoCAYAAADHMkpRAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjExLjAsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvlcelbwAAAAlwSFlzAAAPYQAAD2EBqD+naQAATpRJREFUeJzt3Qm8VuP+//+reR4UpZSKNCiSBkMIUaGSIamDOpzU4VCIhEgoIjocYxkzlIxFSZpQJIpIjqLScDRIo+bW//G+vr91/9e99tpD7Vpr7b1ez8dj07732ntfe91r+Kzruj6fq4DjOI4BAABAYhSMugEAAAAIFwEgAABAwhAAAgAAJAwBIAAAQMIQAAIAACQMASAAAEDCEAACAAAkDAEgAABAwhAAAgAAJAwBIAAAQMIQAAIAACQMASAAAEDCEAACAAAkDAEgAABAwhAAAoiFtm3bmhNOOCFH215++eWmdu3aB71NAJBfEQAC+VivXr1MgQIFTOHChc2qVasyfH3Xrl3msMMOs9ucc845B709HTt2NPXq1TNx3U/uR9GiRU3NmjXNP//5T7NmzZqom5enrF692jz44IOmefPmply5cqZKlSqmTZs25tNPPw3c/q+//jK33nqrqVatmilWrJipX7++efLJJ3P1c7/99tu099P78cwzzxyUvxvIawgAgQQoXry4GTVqVIbXP/jgA/PHH3+YEiVKRNKuuFm7dq1xHMesX7/ePProo+bVV181rVq1Mrt37466aXlGz549zeOPP27+9a9/meXLl5s5c+bYYLply5Z2f/pdcskl5vXXXzdjx441GzduNPfcc4+56aabzP3335+rnys65vV+ej8U7AMgAAQS4eKLLzYvv/xyhtdffPFFc/bZZ5sKFSpE0q64Kl26tN1n6gH84YcfzLRp06JuUp5x0kknme+++85cddVVpmzZsrZnT71uxx57rLnrrrvStp0wYYL56KOPzLBhw8wpp5xiH1Q0vH/dddfZANDb+7ovPxdA9ugBBBKge/fuZuHChWb27NlpQ2oTJ040f//73zP9PvXK6MZbsmRJU6ZMGRssTp8+PXDu3u+//24uuugiu52GlXv37m2HmF3a5v333zf//e9/04bk/LL7OUHUY6Thw6Dh2n79+tkh8P/9739mXx1zzDH2/ytWrEh7/bfffrP7rWrVqna4uFatWrbnym3n22+/bf829bD6ffzxx/Zr2rc5/Xmi4U9937p16+yQqfZNqVKlTIcOHTIM76uXTEGs33vvvWd/xpdffrlPf8++6N+/v22bl37nUUcdZZYtW2b27t2bel37qVChQqZ9+/Zp2yv43rFjhxk3btx+/VwA2SMABBLg1FNPNXXr1jUvvfRS2vCYAjvdbIM89dRT5rLLLrNB36+//mq+//572+uiuYLqufHauXOnueGGG8wtt9xig5F///vfdh6Xena887IuvPBC2w7vkNy+/pwg6jFSsDJy5Mi01xVEvPDCC+a8886zc8b2lYJVOfLII1OvLVmyxDRt2tQsWrTIjB8/3g4Xjxgxwv7uK6+80m6joKxSpUrm+eefz/Az1Z6KFSvafZHTn+elQEjB9OLFi83UqVPNN998Y66++up9/tv25e/JLQ3tfvbZZzagLljw/7/tzJ8/3x5TCmS9NA9QdMztz8919enTxwa06jHUUPG77757QP4eIF9wAORbPXv2VITlbNu2zRk8eLBTvnx5Z/v27fZrDRo0cHr06GH/fcQRRzitWrVKfd9ff/3llCtXzmndunXaz9uzZ49Tp04dp27duqnX2rRpY3/HV199lbZt+/btnVq1aqW9duGFF6Z9r9e+/JzOnTs7Rx99dNpr5557rlOjRg3bRteoUaPsz3z33XdztJ/Wrl1rP9+8ebMzduxYp1SpUk6zZs3SfmanTp2cChUqOOvWrUv7GW+99Zb9GXPmzLGf9+3b1ylcuLCzevXq1DZ//PGHU6xYMadPnz77/POGDBliPx86dGjadsOGDbOvL1u2LPXa9ddfb9vup/2gbb/44ot9/v250b17d/uzRo4cmfa63tdGjRpl2H7nzp12+65du+7Xz50/f75z3XXXOXPnznW2bNni/Pjjj87f/vY3u+0jjzyS678HyA/oAQQSQnOnNm3aZIcBv/rqK7NgwYJMh3/Vq6TeFX/voHpZNDyrnrGVK1emXtfQXLNmzdK2bdiwoR1a3JcEitz8nOuvv94OBX744YdpvZiVK1c27dq1y/Hv17Cihp87depk2zJlypRU75KGGfXz1SuqXjwvN4t6xowZ9v/XXHONbfMrr7yS2ua1116zvZL62r7+PNcFF1yQYf+Iemn31f78/n31yCOP2J5n9Sa7f7dX0DQA97Wgr+Xk5x533HG257hx48a2d1E9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AAAACUMACAAAkDAEgAAAAAlDAAgAAJAwBIAAAAAJQwAIAACQMASAAAAACUMACAAAkDAEgAAAAAlT+ED8kFWrVplZs2aZXbt2mSZNmpg6depk2GbPnj1mypQpZtmyZeaYY44xLVu2NAUKFIhsGwAAgKTKdQ/gv/71L9OiRQszevRo895775nGjRubvn37pm2zdetWc8YZZ5iePXua6dOnm65du5r27dvbgDGKbQAAAJIs1z2AZ599thk+fLgpXPj/ftSnn35qe9w6dOhgAzF56KGHbG/c/PnzTYUKFey/GzZsaEaOHGn++c9/hr4NAABAkuW6B/Diiy9OBX+ioK9o0aLmp59+Sr02ZswY07lzZxuQSY0aNUy7du3s61FsAwAAkGQHPAnko48+Mjt37rRzAUVDr4sWLTL169dP206f//jjj6FvE2THjh1m06ZNaR8AAAD51QENAFeuXGmuueYac8UVV6QCQM3JcxzHlC9fPm3bQw45JBVohblNkCFDhphy5cqlPqpXr56r/QAAAJCIAHD16tXmnHPOMQ0aNLDz7VzFixe3/9+8eXPa9grISpYsGfo2Qfr37282btyY+li+fPk+//0AAACJKgOzZs0amwxSrVo18/7775tixYqlvqagTD1qS5YsSfueX3/91ZZoCXubIGqvt80AAAD5Wa57ANeuXWuDv6pVq5px48aZEiVKZNhGGcFjx461c+1EvWzjx4+3r0exDQAAQJLlugewTZs2ttRKt27dzPPPP596vXnz5vZDBgwYYD744AM7RNy6dWvz7rvvmsqVK5sbb7wxtX2Y2wAAACRZrnsAVfNPwZ+CQJV+cT/WrVuX2kYB2Lx588yll15qNmzYYK699loze/ZsU6ZMmUi2AQAASLJc9wA+9thjOdpOmbi9e/eOzTYAAABJdcDrAAIAACDeCAABAAAShgAQAAAgYQgAAQAAEoYAEAAAIGEIAAEAABKGABAAACBhCAABAAAShgAQAAAgYQgAAQAAEoYAEAAAIGEIAAEAABKGABAAACBhCAABAAAShgAQAAAgYQgAAQAAEoYAEAAAIGEIAAEAABKGABAAACBhCAABAAAShgAQAAAgYQgAAQAAEoYAEAAAIGEIAAEAABKGABAAACBhCAABAAAShgAQAAAgYQgAAQAAEuaABYCbNm0yX3/9tVm/fn2m2+hr33//vd02DtsAAAAkUa4DwF9++cX07NnT1K1b1zRr1sxMmDAhwzaO45jevXubKlWqmI4dO5pKlSqZ++67L7JtAAAAkizXAeC8efNM48aNzaJFizLdZsSIEebFF1+0PYQKGCdNmmQGDRpkxo0bF8k2AAAASZbrAPDSSy81vXr1MqVLl850GwVl2u64446zn7ds2dKcffbZZuTIkZFsAwAAkGQHPQlkz5495rvvvrPDw14nnXSSmTt3bujbAAAAJF3hg/0LNm/ebHbt2mUqVqyY9vqhhx5q/vjjj9C3CbJjxw774SJxBAAA5GcHvQewSJEi9v/eAEu2bduW+lqY2wQZMmSIKVeuXOqjevXq+/nXAgAAxN9BDwBLlSplKlSoYFatWpX2uj4/8sgjQ98mSP/+/c3GjRtTH8uXL8/lXw0AAJDwQtCtWrUyH374YerzvXv32nIxej2KbfyKFStmypYtm/YBAACQX+U6ANS8O5Vc0YcsWbLE/nvZsmWpbe666y772o033mgmT55sunXrZgs133LLLZFsAwAAkGS5DgAXLlxoy8Doo0mTJub999+3/x41alRqm+OPP9589tlnZu3atWbgwIGmUKFCZtasWWnDsmFuAwAAkGS5zgJu3rx5qvcvKwoO33jjjdhsAwAAkFShzAEEAABAfBAAAgAAJAwBIAAAQMIQAAIAACQMASAAAEDCEAACAAAkDAEgAABAwhAAAgAAJAwBIAAAQMIQAAIAACQMASAAAEDCEAACAAAkDAEgAABAwhAAAgAAJAwBIAAAQMIQAAIAACQMASAAAEDCEAACAAAkDAEgAABAwhAAAgAAJAwBIAAAQMIQAAIAACQMASAAAEDCEAACAAAkDAEgAABAwhAAAgAAJAwBIAAAQMIQAAIAACQMASAAAEDC5MsA8PXXXzfHHnusKVWqlDnhhBPMhAkTom4SAABAbOS7APDjjz823bp1M3379jVLly41Xbt2NR07djTz5s2LumkAAACxkO8CwEceecRccMEF5uqrrzaHHXaYue2220yjRo3MY489FnXTAAAAYiFfBYCO45hZs2aZs846K+31Vq1a2dcBAABgTOH8tBM2b95stm7daipVqpT2unoCf//990y/b8eOHfbDtXHjRvv/TZs2HcTWGrNnxxYTBzn5O2nrgd+vcdmneamtHKvJfv/zUls5Vtmvmw5yDOH+fHV+7RcnH9m4caP2gvP666+nvf7oo486JUuWzPT77rnnHvt9fLAPOAY4BjgGOAY4BjgGTB7aB8uXL9+vmClf9QCWKVPGlCxZ0qxduzbt9TVr1pjKlStn+n39+/c3N998c+rzvXv3mvXr15uKFSuaAgUKmLhS9F+9enWzfPlyU7ZsWRNntJV9yrHKMZAXjgGuVezXTXnk3qqeP418Vq1adb++P18FgArWTj75ZDNjxgxz4403pl6fOnWqOfXUUzP9vmLFitkPr/Lly5u8QgdonA9SL9rKPuVY5RjIC8cA1yr2a9k8cG8tV67cfn9vvkoCEfXkjRs3ztYCVGT8xBNPmLlz55revXtH3TQAAIBYyHcBoErAPPvss+bOO++0vXhPPvmkefPNN02zZs2ibhoAAEAs5KshYJdqAOojv9Ow9T333JNh+DqOaCv7lGOVYyAvHANcq9ivxfLQvTU3CigTJOpGAAAAIDz5bggYAAAAWSMABAAASBgCQAAAgIQhAASAhHKXvQSQPASAwAGUV3KqtDrODz/8YPKCr7/+2kycONHkBX/99Zdtr1YTirsbbrjBdOrUyeQFWt3pt99+i7oZQL5CAJhA06ZNM7///rvJC3TjP/fcc80JJ5xgHnjggdjeWBX4DR061Bx++OG2dMD9999v4mrr1q3mrLPOMmeeeaaZP3++iTMFU+eff77Zvn27ibt33nnHHH300eY///mP+fHHH03cg7+xY8eayZMnx/pBQO/7tddea6pUqWJq1KhhevbsaeJK19R//OMfpkGDBqZNmzbmrbfeMnE1Z84cew3Q9ap169b2OIirt99+2+zcudPEneM45umnn7arkZ100klmzJgxJvb2awVh5Fnff/+9U6xYMad+/frO//73PyfOnnjiCefwww93Bg0a5Fx//fVOoUKFnCFDhjhx1KtXL6d58+bOuHHjnHvuuccu0L1w4UInjrZv3+6ULFnSOfnkk52KFSs63333nRNHc+bMcQ477DDnnXfeceLul19+ccqVK+d88803Ttz961//cpo2beqsWbPGqV69utOjRw8njvbu3et06NDBueiii5z//ve/zqhRo5wCBQo4P/30kxM32pe1atWy+/bDDz90rrrqKnsN6NSpk7Nt2zYnTubPn+8ceuih9vr63nvvOe3bt7dtvfnmm+0+j5M33njDtu2CCy5wduzY4cTZFVdc4Rx//PHOQw895HTs2NEeq1OmTHHijAAwYXSxv+2225waNWrEOghcunSpU6FCBWfRokWp12688UYbEMTN559/7tSpU8fZunVr6rUjjzzS+fHHH53ff//diaOjjjrKtu+UU05JCwJXr17txDH4U9D62GOP2QvrP/7xD2fevHlOnAwcONDe7L1mzpzpPPnkk86XX37pxC34+/PPP+3nulmVKFHCWbdunRM3Y8eOdWrXrp1249fnOlb1/u/atcuJ0wOggj6vVq1a2eDl3HPPjVVb//a3vzl33nln2mtPP/20fcC+9tprnTg58cQTnaFDh9oH1jgHge+88469n/7111+p10466SQbXMcZQ8AJovlJH374oRkwYICZPn26/fzss8+O5XDwyy+/bNdvrl27duq1yy67zM4F2rBhg4mTN954wwwaNMiULFnSfv7NN9+YdevWmVNOOcUOsWgf//nnnyZO6tWrZ+dUffTRR6ZOnTq2jf369bNDV3GYx/j999+b9evXmz/++MMmKpx22mn2mDjssMPMp59+aodY3n//fRMXOi7d6Ql79uwxV111lR1aGzJkiB0Suv3226Nuopk9e7b56quv7HCflsmUHj16mIIFC5oRI0aYuJk5c6Y54ogjTNGiRe3nM2bMMCtWrLBDlyeeeKJp2LChWbJkiYkDHZP+5UYbNWpkunbtaqZOnWoefPBBExcrV640RYoUSXutV69e5sUXXzTPPfdcbI4FXUcLFSpkbr31VjNhwgQ7deniiy+O5XDwiBEjzPDhw02JEiVSr2l+7c8//2xiLeoIFOGaPXt26t9LliyJbU/g6NGj03r/3PbqkI1br5p6eDZu3Gj/rTZXq1bNuf32251Vq1Y506ZNsz1Zf//735040XDPI488Yv+ttqtHUPt2/PjxTlw8++yztleiUaNGtud6z549qd5APVkfcsghzqZNm5w4UA9KqVKl7LH58MMPOy1btkz1sj366KN236pHMGq7d+/O8Np1111nj9k49VKJhie139QrdccddzilS5d2RowYYYcpf/75ZzvkevbZZztxoN6p4447LnUdWLFihXPEEUfYaSC9e/e2oxk7d+504kD7Uu930LnjjrLEoadN+2vu3Lmpz6dPnx7bnsAhQ4ZkOLc0fF2zZk0nzggAEy4oCFSX+4IFC5y4UUClG4LbTl0EHnzwwdhc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"
             },
             "error": null
           },
           {
             "type": "final",
-            "answer": "Monthly revenue is charted above. 2025-02 had the highest revenue, at $4559.45."
+            "answer": "Monthly revenue is charted above. 2025-10 had the highest revenue, at $58591.00."
           }
         ],
-        "final_answer": "Monthly revenue is charted above. 2025-02 had the highest revenue, at $4559.45.",
-        "elapsed_seconds": 0.0006,
+        "final_answer": "Monthly revenue is charted above. 2025-10 had the highest revenue, at $58591.00.",
+        "elapsed_seconds": 0.447,
         "tool_calls": [
-          "sql_query",
-          "chart"
-        ]
+          "run_sql",
+          "make_chart"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "monthly_revenue_trend",
@@ -706,25 +617,25 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "chart",
-            "sql_query"
+            "make_chart",
+            "run_sql"
           ],
           "actual": [
-            "sql_query",
-            "chart"
+            "run_sql",
+            "make_chart"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": "2025-02",
-          "final_answer": "Monthly revenue is charted above. 2025-02 had the highest revenue, at $4559.45."
+          "gold": "2025-10",
+          "final_answer": "Monthly revenue is charted above. 2025-10 had the highest revenue, at $58591.00."
         },
         "faithfulness": {
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            4559.45
+            58591.0
           ],
           "ungrounded": []
         },
@@ -733,84 +644,64 @@
     },
     {
       "trace": {
-        "case_id": "revenue_growth_jan_feb",
-        "question": "What was the percentage revenue growth from January to February 2025?",
+        "case_id": "q1_revenue",
+        "question": "How much revenue came from orders placed in the first quarter?",
         "steps": [
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
-              "query": "SELECT ROUND(SUM(CASE WHEN o.order_date LIKE '2025-01%' THEN oi.quantity*oi.unit_price ELSE 0 END),2) AS jan_rev, ROUND(SUM(CASE WHEN o.order_date LIKE '2025-02%' THEN oi.quantity*oi.unit_price ELSE 0 END),2) AS feb_rev FROM order_items oi JOIN orders o ON o.id=oi.order_id"
+              "query": "SELECT ROUND(SUM(oi.quantity*oi.unit_price),2) AS rev FROM order_items oi JOIN orders o ON o.id=oi.order_id WHERE o.order_date >= '2025-01-01' AND o.order_date < '2025-04-01'"
             },
             "observation": [
               {
-                "jan_rev": 3069.68,
-                "feb_rev": 4559.45
+                "rev": 149881.58
               }
             ],
             "error": null
           },
           {
-            "type": "tool",
-            "id": "tool_1",
-            "tool": "calculator",
-            "args": {
-              "expression": "(4559.45 - 3069.68) / 3069.68 * 100"
-            },
-            "observation": {
-              "expression": "(4559.45 - 3069.68) / 3069.68 * 100",
-              "result": 48.53176878371687
-            },
-            "error": null
-          },
-          {
             "type": "final",
-            "answer": "Revenue grew 48.53% from January ($3069.68) to February ($4559.45)."
+            "answer": "Revenue from the first quarter (January through March) was $149881.58."
           }
         ],
-        "final_answer": "Revenue grew 48.53% from January ($3069.68) to February ($4559.45).",
-        "elapsed_seconds": 0.0006,
+        "final_answer": "Revenue from the first quarter (January through March) was $149881.58.",
+        "elapsed_seconds": 0.0044,
         "tool_calls": [
-          "sql_query",
-          "calculator"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
-        "case_id": "revenue_growth_jan_feb",
-        "question": "What was the percentage revenue growth from January to February 2025?",
+        "case_id": "q1_revenue",
+        "question": "How much revenue came from orders placed in the first quarter?",
         "is_honest_failure": false,
         "failure_note": null,
         "tool_choice": {
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "calculator",
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query",
-            "calculator"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": 48.53,
+          "gold": 149881.58,
           "candidates": [
-            48.53,
-            3069.68,
-            4559.45
+            149881.58
           ],
-          "tolerance": 0.05
+          "tolerance": 0.02
         },
         "faithfulness": {
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            48.53,
-            3069.68,
-            4559.45
+            149881.58
           ],
           "ungrounded": []
         },
@@ -825,27 +716,28 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT ROUND((SELECT SUM(quantity*unit_price) FROM order_items) - (SELECT COALESCE(SUM(oi.quantity*oi.unit_price),0) FROM returns r JOIN order_items oi ON oi.id=r.order_item_id),2) AS net"
             },
             "observation": [
               {
-                "net": 11948.63
+                "net": 548261.13
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "Net revenue after returns is $11948.63."
+            "answer": "Net revenue after returns is $548261.13."
           }
         ],
-        "final_answer": "Net revenue after returns is $11948.63.",
-        "elapsed_seconds": 0.0006,
+        "final_answer": "Net revenue after returns is $548261.13.",
+        "elapsed_seconds": 0.0038,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "net_revenue_after_returns",
@@ -856,18 +748,18 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": 11948.63,
+          "gold": 548261.13,
           "candidates": [
-            11948.63
+            548261.13
           ],
           "tolerance": 0.02
         },
@@ -875,7 +767,7 @@
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            11948.63
+            548261.13
           ],
           "ungrounded": []
         },
@@ -890,28 +782,29 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT cu.name, ROUND(SUM(oi.quantity*oi.unit_price),2) AS total FROM order_items oi JOIN orders o ON o.id=oi.order_id JOIN customers cu ON cu.id=o.customer_id GROUP BY cu.name ORDER BY total DESC LIMIT 1"
             },
             "observation": [
               {
-                "name": "Kira Volkov",
-                "total": 2034.8
+                "name": "Alice Singh",
+                "total": 9398.94
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "Kira Volkov is our highest-spending customer, at $2034.80."
+            "answer": "Alice Singh is our highest-spending customer, at $9398.94."
           }
         ],
-        "final_answer": "Kira Volkov is our highest-spending customer, at $2034.80.",
-        "elapsed_seconds": 0.0007,
+        "final_answer": "Alice Singh is our highest-spending customer, at $9398.94.",
+        "elapsed_seconds": 0.0105,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "top_customer_by_spend",
@@ -922,88 +815,23 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": "Kira Volkov",
-          "final_answer": "Kira Volkov is our highest-spending customer, at $2034.80."
+          "gold": "Alice Singh",
+          "final_answer": "Alice Singh is our highest-spending customer, at $9398.94."
         },
         "faithfulness": {
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            2034.8
-          ],
-          "ungrounded": []
-        },
-        "overall_pass": true
-      }
-    },
-    {
-      "trace": {
-        "case_id": "unique_customers_apparel",
-        "question": "How many unique customers have purchased Apparel?",
-        "steps": [
-          {
-            "type": "tool",
-            "id": "tool_0",
-            "tool": "sql_query",
-            "args": {
-              "query": "SELECT COUNT(DISTINCT o.customer_id) AS n FROM order_items oi JOIN orders o ON o.id=oi.order_id JOIN products p ON p.id=oi.product_id WHERE p.category='Apparel'"
-            },
-            "observation": [
-              {
-                "n": 10
-              }
-            ],
-            "error": null
-          },
-          {
-            "type": "final",
-            "answer": "10 unique customers have purchased Apparel."
-          }
-        ],
-        "final_answer": "10 unique customers have purchased Apparel.",
-        "elapsed_seconds": 0.0007,
-        "tool_calls": [
-          "sql_query"
-        ]
-      },
-      "score": {
-        "case_id": "unique_customers_apparel",
-        "question": "How many unique customers have purchased Apparel?",
-        "is_honest_failure": false,
-        "failure_note": null,
-        "tool_choice": {
-          "method": "deterministic",
-          "score": 1.0,
-          "expected": [
-            "sql_query"
-          ],
-          "actual": [
-            "sql_query"
-          ]
-        },
-        "answer_match": {
-          "method": "deterministic",
-          "score": 1.0,
-          "gold": 10,
-          "candidates": [
-            10.0
-          ],
-          "tolerance": 0
-        },
-        "faithfulness": {
-          "method": "heuristic-grounding",
-          "score": 1.0,
-          "answer_numbers": [
-            10.0
+            9398.94
           ],
           "ungrounded": []
         },
@@ -1018,27 +846,28 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT ROUND(AVG(unit_price),2) AS a FROM products WHERE category='Electronics'"
             },
             "observation": [
               {
-                "a": 116.66
+                "a": 109.99
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "The average unit price of Electronics products is $116.66."
+            "answer": "The average unit price of Electronics products is $109.99."
           }
         ],
-        "final_answer": "The average unit price of Electronics products is $116.66.",
-        "elapsed_seconds": 0.0005,
+        "final_answer": "The average unit price of Electronics products is $109.99.",
+        "elapsed_seconds": 0.0019,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "avg_unit_price_electronics_products",
@@ -1049,18 +878,18 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": 116.66,
+          "gold": 109.99,
           "candidates": [
-            116.66
+            109.99
           ],
           "tolerance": 0.02
         },
@@ -1068,7 +897,7 @@
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            116.66
+            109.99
           ],
           "ungrounded": []
         },
@@ -1083,27 +912,28 @@
           {
             "type": "tool",
             "id": "tool_0",
-            "tool": "sql_query",
+            "tool": "run_sql",
             "args": {
               "query": "SELECT ROUND(SUM(oi.quantity*oi.unit_price),2) AS rev FROM order_items oi JOIN products p ON p.id=oi.product_id WHERE p.category='Apparel'"
             },
             "observation": [
               {
-                "rev": 1799.76
+                "rev": 119909.09
               }
             ],
             "error": null
           },
           {
             "type": "final",
-            "answer": "Apparel generated $1799.76 in revenue."
+            "answer": "Apparel generated $119909.09 in revenue."
           }
         ],
-        "final_answer": "Apparel generated $1799.76 in revenue.",
-        "elapsed_seconds": 0.0006,
+        "final_answer": "Apparel generated $119909.09 in revenue.",
+        "elapsed_seconds": 0.0038,
         "tool_calls": [
-          "sql_query"
-        ]
+          "run_sql"
+        ],
+        "retries": 0
       },
       "score": {
         "case_id": "revenue_apparel",
@@ -1114,18 +944,18 @@
           "method": "deterministic",
           "score": 1.0,
           "expected": [
-            "sql_query"
+            "run_sql"
           ],
           "actual": [
-            "sql_query"
+            "run_sql"
           ]
         },
         "answer_match": {
           "method": "deterministic",
           "score": 1.0,
-          "gold": 1799.76,
+          "gold": 119909.09,
           "candidates": [
-            1799.76
+            119909.09
           ],
           "tolerance": 0.02
         },
@@ -1133,8 +963,122 @@
           "method": "heuristic-grounding",
           "score": 1.0,
           "answer_numbers": [
-            1799.76
+            119909.09
           ],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "profit_margin_best_seller",
+        "question": "What is the profit margin on our best-selling product?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "get_schema",
+            "args": {},
+            "observation": {
+              "schema": "products(id, name, category, unit_price)\ncustomers(id, name)\norders(id, customer_id, order_date, status)\norder_items(id, order_id, product_id, quantity, unit_price)\nreturns(id, order_item_id, reason, return_date)"
+            },
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "I can't determine profit margin \u2014 products only stores unit_price (the selling price), with no cost or COGS column to compare it against."
+          }
+        ],
+        "final_answer": "I can't determine profit margin \u2014 products only stores unit_price (the selling price), with no cost or COGS column to compare it against.",
+        "elapsed_seconds": 0.0025,
+        "tool_calls": [
+          "get_schema"
+        ],
+        "retries": 0
+      },
+      "score": {
+        "case_id": "profit_margin_best_seller",
+        "question": "What is the profit margin on our best-selling product?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "get_schema"
+          ],
+          "actual": [
+            "get_schema"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": "should decline to answer",
+          "final_answer": "I can't determine profit margin \u2014 products only stores unit_price (the selling price), with no cost or COGS column to compare it against."
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [],
+          "ungrounded": []
+        },
+        "overall_pass": true
+      }
+    },
+    {
+      "trace": {
+        "case_id": "customer_email_lookup",
+        "question": "What is the email address of our highest-spending customer?",
+        "steps": [
+          {
+            "type": "tool",
+            "id": "tool_0",
+            "tool": "get_schema",
+            "args": {},
+            "observation": {
+              "schema": "products(id, name, category, unit_price)\ncustomers(id, name)\norders(id, customer_id, order_date, status)\norder_items(id, order_id, product_id, quantity, unit_price)\nreturns(id, order_item_id, reason, return_date)"
+            },
+            "error": null
+          },
+          {
+            "type": "final",
+            "answer": "I can't answer that \u2014 customers only has id and name in this schema, there's no email column."
+          }
+        ],
+        "final_answer": "I can't answer that \u2014 customers only has id and name in this schema, there's no email column.",
+        "elapsed_seconds": 0.0026,
+        "tool_calls": [
+          "get_schema"
+        ],
+        "retries": 0
+      },
+      "score": {
+        "case_id": "customer_email_lookup",
+        "question": "What is the email address of our highest-spending customer?",
+        "is_honest_failure": false,
+        "failure_note": null,
+        "tool_choice": {
+          "method": "deterministic",
+          "score": 1.0,
+          "expected": [
+            "get_schema"
+          ],
+          "actual": [
+            "get_schema"
+          ]
+        },
+        "answer_match": {
+          "method": "deterministic",
+          "score": 1.0,
+          "gold": "should decline to answer",
+          "final_answer": "I can't answer that \u2014 customers only has id and name in this schema, there's no email column."
+        },
+        "faithfulness": {
+          "method": "heuristic-grounding",
+          "score": 1.0,
+          "answer_numbers": [],
           "ungrounded": []
         },
         "overall_pass": true
