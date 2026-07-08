@@ -1,0 +1,122 @@
+.trace {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 8px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.trace > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trace > summary::-webkit-details-marker {
+  display: none;
+}
+
+.retryBadge {
+  font-size: 0.68rem;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--warning);
+  color: var(--warning);
+}
+
+.rail {
+  border-top: 1px solid var(--border);
+  padding: 10px 12px 14px;
+}
+
+.step {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--grid);
+}
+
+.step:last-child {
+  border-bottom: none;
+}
+
+.stepNum {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--page);
+  color: var(--ink-muted);
+  font-size: 0.68rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.finalStep .stepNum {
+  background: var(--good);
+  color: #fff;
+}
+
+.errorStep .stepNum {
+  background: var(--critical);
+  color: #fff;
+}
+
+.stepBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.toolChip {
+  display: inline-block;
+  font-size: 0.72rem;
+  background: var(--page);
+  color: var(--series-1);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 7px;
+  margin-bottom: 6px;
+}
+
+.code {
+  font-size: 0.76rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--page);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin: 0 0 6px;
+  color: var(--ink-2);
+}
+
+.observation {
+  font-size: 0.74rem;
+  color: var(--ink-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.errorText {
+  font-size: 0.74rem;
+  color: var(--critical);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.finalAnswer {
+  font-size: 0.85rem;
+}
+
+.chartImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 4px 0 8px;
+  display: block;
+}
