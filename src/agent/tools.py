@@ -21,6 +21,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from ..config import SETTINGS
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DB_PATH = REPO_ROOT / "data" / "business.db"
 SANDBOX_ROOT = REPO_ROOT / "sandbox"
@@ -29,14 +31,6 @@ _READ_ONLY_PATTERN = re.compile(r"^\s*SELECT\b", re.IGNORECASE)
 _FORBIDDEN_PATTERN = re.compile(
     r"\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|ATTACH|PRAGMA|REPLACE)\b", re.IGNORECASE
 )
-
-SCHEMA_DESCRIPTION = """\
-products(id, name, category, unit_price)
-customers(id, name)
-orders(id, customer_id, order_date [YYYY-MM-DD], status)
-order_items(id, order_id, product_id, quantity, unit_price)
-returns(id, order_item_id, reason, return_date)
-"""
 
 RUN_PYTHON_TIMEOUT_SECONDS = 10
 
@@ -58,8 +52,42 @@ class ToolError(Exception):
     pass
 
 
+def _introspect_sqlite():
+    conn = sqlite3.connect(DB_PATH)
+    try:
+        tables = [r[0] for r in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
+        ).fetchall()]
+        lines = []
+        for table in tables:
+            columns = [r[1] for r in conn.execute(f'PRAGMA table_info("{table}")').fetchall()]
+            lines.append(f"{table}({', '.join(columns)})")
+        return "\n".join(lines)
+    finally:
+        conn.close()
+
+
+def _introspect_postgres():
+    import psycopg2
+    conn = psycopg2.connect(SETTINGS.database_url)
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT table_name, column_name FROM information_schema.columns "
+                "WHERE table_schema = 'public' ORDER BY table_name, ordinal_position"
+            )
+            rows = cur.fetchall()
+        tables = {}
+        for table_name, column_name in rows:
+            tables.setdefault(table_name, []).append(column_name)
+        return "\n".join(f"{t}({', '.join(cols)})" for t, cols in tables.items())
+    finally:
+        conn.close()
+
+
 def get_schema(args: dict = None) -> dict:
-    return {"schema": SCHEMA_DESCRIPTION}
+    schema = _introspect_postgres() if SETTINGS.database_url else _introspect_sqlite()
+    return {"schema": schema}
 
 
 def run_sql(args: dict) -> list:
@@ -68,6 +96,17 @@ def run_sql(args: dict) -> list:
         raise ToolError("run_sql only accepts SELECT statements")
     if _FORBIDDEN_PATTERN.search(query):
         raise ToolError("run_sql rejected: mutating/schema statements are not allowed")
+
+    if SETTINGS.database_url:
+        import psycopg2
+        import psycopg2.extras
+        conn = psycopg2.connect(SETTINGS.database_url)
+        try:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(query)
+                return [dict(r) for r in cur.fetchall()]
+        finally:
+            conn.close()
 
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
