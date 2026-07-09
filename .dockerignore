@@ -1,0 +1,11 @@
+.git
+.env
+__pycache__
+*.pyc
+.venv
+venv
+sandbox
+frontend
+tests
+reports
+data/business.db
