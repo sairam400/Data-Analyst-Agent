@@ -25,6 +25,10 @@ class TestRunSqlGuard(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertIn("n", rows[0])
 
+    def test_wraps_sqlite_errors_as_tool_error(self):
+        with self.assertRaises(ToolError):
+            run_sql({"query": "SELECT no_such_column FROM products"})
+
 
 class TestRunPython(unittest.TestCase):
     def test_prints_stdout(self):

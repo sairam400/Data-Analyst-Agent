@@ -16,9 +16,7 @@ work, not just read its conclusion.
 
 ## Demo
 
-*(demo GIF goes here: ask a question, watch the trace panel expand with the
-SQL it ran, the retry after a deliberate query error, and the resulting
-chart)*
+![Demo: asking a question, watching the trace panel expand with the SQL it ran, a self-correction retry after a query error, and the resulting chart](docs/demo.gif)
 
 ## Architecture
 

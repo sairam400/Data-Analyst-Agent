@@ -105,6 +105,8 @@ def run_sql(args: dict) -> list:
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
                 cur.execute(query)
                 return [dict(r) for r in cur.fetchall()]
+        except psycopg2.Error as exc:
+            raise ToolError(str(exc).strip())
         finally:
             conn.close()
 
@@ -113,6 +115,8 @@ def run_sql(args: dict) -> list:
     try:
         rows = conn.execute(query).fetchall()
         return [dict(r) for r in rows]
+    except sqlite3.Error as exc:
+        raise ToolError(str(exc))
     finally:
         conn.close()
 
